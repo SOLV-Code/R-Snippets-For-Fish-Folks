@@ -82,6 +82,12 @@ subtotal.tibble
 
 # same steps in base R and TIDY.
 
+lm.fit <- lm(log(Total_Catch) ~ log(Total_Spn), data=total.tibble) # fit a linear model
+names(lm.fit) # print a list of components in the output from lm
+lm.fit$residuals # access one of the components
+summary(lm.fit) # print a summary of the fit
+plot(lm.fit)  # create a series of diagnostic plots
+
 
 
 # PART 4: PLOT THE REGRESSION FIT #############################################################################
@@ -98,6 +104,7 @@ abline(lm.fit$coefficients,col="red",lwd=2)
 # plot a line with intercept a and slope b
 # lwd is the line width
 
+title(main="Linear Fit", col.main="darkblue",cex.main=1.5)
 
 # TIDY
 # ggplot version to be inserted
