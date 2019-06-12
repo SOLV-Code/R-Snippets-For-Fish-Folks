@@ -13,10 +13,7 @@
 
 
 # load the tidyverse packages
-library(dplyr)
-library(tidyr)
-library(readr)
-library(ggplot2)
+library(tidyverse)
 
 
 # PART 1: READ IN THE DATA #############################################################################
