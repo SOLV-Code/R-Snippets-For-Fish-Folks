@@ -8,6 +8,7 @@ Brief snippets of helpful R code for typical tasks in fisheries science. Leave a
 ### Planned Snippets
 * *Snippet 3*: extract data from a messy excel file
 * *Snippet 4*: replicate database queries and pivot tables in R
+* *Snippet 5*: speed up common computations
 
 ### Resources
 
