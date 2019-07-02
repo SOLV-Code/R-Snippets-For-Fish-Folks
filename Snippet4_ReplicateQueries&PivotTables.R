@@ -101,7 +101,7 @@ filtered.sums <- filtered.records  %>% dplyr::select(SPECIES, CU_AREA, CU_NAME,F
 filtered.counts <- filtered.records %>%  dplyr::filter(!is.na(NATURAL_ADULT_SPAWNERS)) %>% 
                          dplyr::select(SPECIES, CU_AREA, CU_NAME,FULL_CU_IN, ANALYSIS_YR ) %>% 
                       dplyr::group_by(SPECIES, CU_AREA,  CU_NAME,FULL_CU_IN,ANALYSIS_YR) %>%
-                  dplyr::summarise(numSites=sum(!is.na(NATURAL_ADULT_SPAWNERS))) # only count sites with Nat Spn Data
+                  dplyr::summarise(numSites=n()) # only count sites with Nat Spn Data
 
 filtered.out <- left_join(filtered.counts, filtered.sums, by = c("SPECIES", "CU_AREA", "CU_NAME","FULL_CU_IN", "ANALYSIS_YR"))
 
