@@ -145,7 +145,7 @@ merged.summary <- left_join(allrecords.summary,filtered.summary,by=c("SPECIES", 
 write.csv(merged.summary,"OUTPUT/nuSEDS_SummaryofRecordsByCU.csv",row.names = FALSE)
 
 
-# DIAGNOSTIC PLOTS
+# DIAGNOSTIC PLOTS - VERSION 1
 
 # diagnostic plots by species, in alphebetical order of CUs
 
@@ -153,7 +153,7 @@ species.list <- sort(unique(allrecords.summary$SPECIES))
 
 for(species.plot in species.list ){
   
-pdf(paste0("OUTPUT/PrelimPlots_",species.plot,".pdf"),height = 11, width = 8.5)  
+pdf(paste0("OUTPUT/PrelimPlots_",species.plot,"_NatAdSpn.pdf"),height = 11, width = 8.5)  
   
   
 cu.list <- sort(unique(allrecords.summary$FULL_CU_IN[allrecords.summary$SPECIES==species.plot]))
@@ -211,6 +211,82 @@ title(main=paste(species.plot,cu.plot,cu.name, sep=" - "), outer=TRUE,line=-1)
 dev.off()
   
 } # end looping through species
+
+
+
+# below not finished yet
+
+warning("diag plot 2 not finished yet"); stop()
+
+# DIAGNOSTIC PLOTS - VERSION 2
+
+# diagnostic plots by species, in alphebetical order of CUs
+# comparing NatSpnAd, MaxEst
+
+species.list <- sort(unique(allrecords.summary$SPECIES))
+
+for(species.plot in species.list ){
+  
+  pdf(paste0("OUTPUT/PrelimPlots_",species.plot,"_SpnComp.pdf"),height = 11, width = 8.5)  
+  
+  
+  cu.list <- sort(unique(allrecords.summary$FULL_CU_IN[allrecords.summary$SPECIES==species.plot]))
+  
+  print("-------------")
+  print(species.plot)
+  print(cu.list)
+  
+  for(cu.plot in cu.list) {
+    print("---")
+    print(paste("plotting",cu.plot)  )
+    
+    all.idx <- allrecords.out$FULL_CU_IN == cu.plot
+    all.idx[is.na(all.idx)] <- FALSE
+    filtered.idx <- filtered.out$FULL_CU_IN== cu.plot
+    filtered.idx[is.na(filtered.idx)] <- FALSE
+    
+    allrecords.sub <- allrecords.out[all.idx,]
+    filtered.sub <- filtered.out[filtered.idx,]
+    
+    cu.name <- unique(allrecords.sub$CU_NAME)
+    
+    
+    yr.lims <- range(pretty(allrecords.sub$ANALYSIS_YR ,na.rm=TRUE))
+    val.lims <- range(pretty(c(0,allrecords.sub$MAX_ESTIMATE ,na.rm=TRUE)))
+    log.lims <- range(pretty(safe.log(c(1,allrecords.sub$MAX_ESTIMATE)) ,na.rm=TRUE))
+    num.lims <- range(pretty(c(0,allrecords.sub$numSites ,na.rm=TRUE)))
+    
+    par(mfrow=c(3,2))
+    
+    simple.plot(allrecords.sub$ANALYSIS_YR,allrecords.sub$MAX_ESTIMATE,lims = c(yr.lims, val.lims))
+    title(main = "Log Abundance - All Records")
+    
+    simple.plot(filtered.sub$ANALYSIS_YR,filtered.sub$MAX_ESTIMATE,lims = c(yr.lims, val.lims))
+    title(main = "Log Abundance - High Quality Records")
+    
+    simple.plot(allrecords.sub$ANALYSIS_YR,safe.log(allrecords.sub$MAX_ESTIMATE),lims = c(yr.lims, log.lims))
+    title(main = "Log Abundance - All Records")
+    
+    simple.plot(filtered.sub$ANALYSIS_YR,safe.log(filtered.sub$MAX_ESTIMATE),lims = c(yr.lims, log.lims))
+    title(main = "Log Abundance - High Quality Records")
+    
+    
+    simple.plot(allrecords.sub$ANALYSIS_YR,allrecords.sub$numSites,quantiles = FALSE,lims = c(yr.lims, num.lims))
+    title(main = "Num Sites - All Records")
+    
+    simple.plot(filtered.sub$ANALYSIS_YR,filtered.sub$numSites,quantiles = FALSE,lims = c(yr.lims, num.lims))
+    title(main = "Num Sites - High Quality Records")
+    
+    title(main=paste(species.plot,cu.plot,cu.name, sep=" - "), outer=TRUE,line=-1)  
+    
+    
+  }  # end looping through CU
+  
+  dev.off()
+  
+} # end looping through species
+
+
 
 
 
